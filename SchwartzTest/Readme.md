@@ -1,6 +1,7 @@
 # AWS Lambda Empty Function Project
 
 This starter project consists of:
+* This is based off of the tutorial at: http://matthiasshapiro.com/2017/02/10/tutorial-alexa-skills-in-c-the-code/
 * Function.cs - class file containing a class with a single function handler method
 * aws-lambda-tools-defaults.json - default argument settings for use with Visual Studio and command line deployment tools for AWS
 
