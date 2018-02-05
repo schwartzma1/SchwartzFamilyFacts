@@ -111,6 +111,51 @@ namespace SchwartzTest
             return resources;
         }
 
+        public string emitBirthdayFact(ILambdaContext context, String person)
+        {
+            var log = context.Logger;
+            if (person != null && person.Length > 0)
+            {
+                // trim the plural form back to singular form
+                int indexOfSingleQuote = person.IndexOf('\'');
+                if (indexOfSingleQuote > 0)
+                    person = person.Substring(0, indexOfSingleQuote);
+                person = person.ToLower();
+                log.LogLine($"emitting birthday fact for " + person);
+                DateTime today = DateTime.Today;
+                DateTime birthday = DateTime.Today;
+                if (person == "maya")
+                {
+                    birthday = new DateTime(DateTime.Today.Year, 8, 29);
+                }
+                else if (person == "lily")
+                {
+                    birthday = new DateTime(DateTime.Today.Year, 4, 30);
+                }
+                else if (person == "carlos")
+                {
+                    birthday = new DateTime(DateTime.Today.Year, 2, 14);
+                }
+                else return "sorry I don't know who that is!";
+
+                DateTime next = new DateTime(today.Year, birthday.Month, birthday.Day);
+                if (next < today)
+                    next = next.AddYears(1);
+
+                int numDays = (next - today).Days;
+                String suffix = "";
+                if (numDays < 10)
+                    suffix = "It is getting close to " + person + "'s birthday!  You better be ready!";
+                else if (numDays == 0)
+                {
+                    suffix = "It is " + person + "'s birthday!  Happy birthday to you!";
+                }
+                return person + "'s birthday is in " + numDays + " days.  " + suffix;
+            }
+            return "invalid person was received";
+        }
+
+
         public string emitNewFact(ILambdaContext context, FactResource resource, String person, bool withPreface)
         {
             Random r = new Random();
@@ -150,6 +195,10 @@ namespace SchwartzTest
             SkillResponse response = new SkillResponse();
             response.Response = new ResponseBody();
             response.Response.ShouldEndSession = false;
+            Reprompt reprompt = new Reprompt();
+            reprompt.OutputSpeech = new PlainTextOutputSpeech();
+            ((PlainTextOutputSpeech)reprompt.OutputSpeech).Text = "How about another one?";
+            response.Response.Reprompt = reprompt;
             IOutputSpeech innerResponse = null;
             var log = context.Logger;
 
@@ -205,6 +254,11 @@ namespace SchwartzTest
                         log.LogLine($"GetFactIntent sent: send new fact");
                         innerResponse = new PlainTextOutputSpeech();
                         (innerResponse as PlainTextOutputSpeech).Text = emitNewFact(context, resource, person, false);
+                        break;
+                    case "BirthdayIntent":
+                        log.LogLine($"BirthdayIntent sent: send new birthday");
+                        innerResponse = new PlainTextOutputSpeech();
+                        (innerResponse as PlainTextOutputSpeech).Text = emitBirthdayFact(context, person);
                         break;
                     default:
                         log.LogLine($"Unknown intent: " + intentRequest.Intent.Name);
