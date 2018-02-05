@@ -87,7 +87,7 @@ namespace SchwartzTest
             {
                "Daddy is the best!"
             });
-            facts.Add("Cici", new List<string>()
+            facts.Add("cici", new List<string>()
             {
                "Cici cici bo bici banana fana fo fici, mee my mo Mici, Cici",
                "Cici is a grandma!"
@@ -116,14 +116,23 @@ namespace SchwartzTest
             Random r = new Random();
             var log = context.Logger;
             int value = r.Next(resource.Facts.Count);
+            int numberOfItems = resource.Facts.ElementAt(value).Value.Count;
             if (person != null && person.Length > 0)
             {
                 person = person.ToLower();
                 log.LogLine($"emitting a fact for" + person);
-                log.LogLine(resource.Facts.Keys.ToString());
-                return resource.Facts[person][r.Next(resource.Facts[person].Count)];
+                if (resource.Facts.ContainsKey(person))
+                {
+                    log.LogLine(resource.Facts.Keys.ToString());
+                    return resource.Facts[person][r.Next(resource.Facts[person].Count)];
+                }
+                else
+                {
+                    return "Sorry I don't know who " + person + " is, but here is a fact." +
+                            resource.Facts.ElementAt(value).Value[r.Next(numberOfItems)];
+                }
             }
-            int numberOfItems = resource.Facts.ElementAt(value).Value.Count;
+            
             if (withPreface)
                 return resource.GetFactMessage +
                        resource.Facts.ElementAt(value).Value[r.Next(numberOfItems)];
