@@ -1,4 +1,4 @@
-# AWS Lambda Empty Function Project
+# Schwartz Family facts project
 
 This starter project consists of:
 * This is based off of the tutorial at: http://matthiasshapiro.com/2017/02/10/tutorial-alexa-skills-in-c-the-code/
