@@ -6,7 +6,7 @@
         "dotnet lambda help",
         "All the command line options for the Lambda command can be specified in this file."
     ],
-    "profile"     : "vs_admin",
+    "profile"     : "default",
     "region"      : "us-east-1",
     "configuration" : "Release",
     "framework"     : "netcoreapp2.0",
@@ -16,5 +16,6 @@
     "function-handler"     : "SchwartzTest::SchwartzTest.Function::FunctionHandler",
     "function-name"        : "schwartzFactsFunctionEndpoint",
     "function-role"        : "arn:aws:iam::463834167103:role/lambda_exec_schwartzFactsFunctionEndpoint",
-    "environment-variables" : ""
+    "environment-variables" : "",
+    "tracing-mode"          : "PassThrough"
 }
